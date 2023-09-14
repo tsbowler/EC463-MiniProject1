@@ -27,15 +27,17 @@ export default App;
 */
 // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import GoogleLoginButton from './components/googleLoginButton';
 import Home from './components/Home';
 
 function App() {
   return (
     <Router>
-      <Route path="/" exact component={GoogleLoginButton} /> {/* Make GoogleLoginButton the landing page */}
-      <Route path="/home" component={Home} />
+      <Routes>
+        <Route exact path="" element={<GoogleLoginButton/>} /> {/* Make GoogleLoginButton the landing page */}
+        <Route path="/home" element={<Home/>} />
+      </Routes>
     </Router>
   );
 }

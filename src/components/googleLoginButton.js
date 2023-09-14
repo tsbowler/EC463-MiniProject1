@@ -14,7 +14,10 @@ const GoogleLoginButton = () => {
     }
   };
 
+  console.log("googleTest")
+
   return (
+    console.log("googlebutton"),
     <button onClick={handleGoogleSignIn}>
       Sign in with Google
     </button>
