@@ -33,6 +33,7 @@ import Home from './components/Home';
 
 function App() {
   return (
+    
     <Router>
       <Routes>
         <Route exact path="" element={<GoogleLoginButton/>} /> {/* Make GoogleLoginButton the landing page */}
