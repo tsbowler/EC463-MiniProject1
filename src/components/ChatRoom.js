@@ -4,7 +4,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 function ChatRoom({ db }) {
   const messagesRef = collection(db, 'messages');
-  const q = query(messagesRef, orderBy('timestamp', 'desc'));
+  const q = query(messagesRef, orderBy('createdAt', 'desc'));
   const [messages] = useCollectionData(q, { idField: 'id' });
 
   return (
@@ -14,7 +14,7 @@ function ChatRoom({ db }) {
           <div key={message.id}>{message.text}</div>
         ))
       ) : (
-        <h1>Chat Room Placeholder</h1>
+        <h1>Looks like you don't have any messages yet...</h1>
       )}
     </div>
   );
