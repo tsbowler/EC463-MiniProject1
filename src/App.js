@@ -5,6 +5,7 @@ import Home from './components/Home';
 import ChatRoom from './components/ChatRoom';
 import { useEffect, useState } from 'react';
 import { auth, db } from './firebase';
+import { addUserToFirestore } from './firebaseUtils';
 
 function App() {
   const [user] = useAuthState(auth);
@@ -13,10 +14,9 @@ function App() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
-        // User is authenticated
         setLoading(false);
+        addUserToFirestore(authUser);
       } else {
-        // User is not authenticated
         setLoading(false);
       }
     });
