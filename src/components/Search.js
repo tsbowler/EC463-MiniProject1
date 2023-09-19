@@ -1,18 +1,23 @@
 import React, { useState } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, where, query, getDocs} from 'firebase/firestore';
 import { db } from '../firebase';
 
 function Search() {
-  const [querysave, setQuery] = useState('');
+  const [queryText, setQueryText] = useState('');
   const [results, setResults] = useState([]);
 
   const handleSearch = async () => {
     try {
       const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('displayName', '==', querysave));
-      const querySnapshot = await getDocs(q);
-      const foundUsers = querySnapshot.docs.map((doc) => doc.data());
-      setResults(foundUsers);
+      const queryByEmail = query(usersRef, where('email', '==', queryText));
+      const queryByName = query(usersRef, where('displayName', '==', queryText));
+      const querySnapshotEmail = await getDocs(queryByEmail);
+      const querySnapshotName = await getDocs(queryByName);
+
+      const foundUsersEmail = querySnapshotEmail.docs.map((doc) => doc.data());
+      const foundUsersName = querySnapshotName.docs.map((doc) => doc.data());
+
+      setResults([...foundUsersEmail, ...foundUsersName]);
     } catch (error) {
       console.error('Error searching for users:', error);
     }
@@ -22,9 +27,9 @@ function Search() {
     <div>
       <input
         type="text"
-        placeholder="Search for users"
-        value={querysave}
-        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search for users by email or display name"
+        value={queryText}
+        onChange={(e) => setQueryText(e.target.value)}
       />
       <button onClick={handleSearch}>Search</button>
 

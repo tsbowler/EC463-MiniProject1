@@ -5,7 +5,7 @@ import Home from './components/Home';
 import ChatRoom from './components/ChatRoom';
 import { useEffect, useState } from 'react';
 import { auth, db } from './firebase';
-import { addUserToFirestore } from './firebaseUtils';
+import { addUserToFirestore } from './firebaseUtils'; // Import your utility function
 
 function App() {
   const [user] = useAuthState(auth);
@@ -15,7 +15,7 @@ function App() {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
       if (authUser) {
         setLoading(false);
-        addUserToFirestore(authUser);
+        addUserToFirestore(authUser); // Call the function to update user document with email
       } else {
         setLoading(false);
       }
