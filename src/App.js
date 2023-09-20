@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import GoogleLoginButton from './components/GoogleLoginButton';
 import Home from './components/Home';
 import ChatRoom from './components/ChatRoom';
+import PrivateChat from './components/PrivateChat';
 import { useEffect, useState } from 'react';
 import { auth, db } from './firebase';
 import { addUserToFirestore } from './firebaseUtils'; // Import your utility function
@@ -39,6 +40,7 @@ function App() {
           path="/chatroom"
           element={user ? <ChatRoom user={user} db={db} /> : <Navigate to="/" />}
         />
+        <Route path="/privateChat/:chatRoomId" element={<PrivateChat />} />
       </Routes>
     </Router>
   );

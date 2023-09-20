@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { collection, where, query, getDocs} from 'firebase/firestore';
+import { Link } from 'react-router-dom';
+import { collection, where, query, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import { SHA256 } from 'crypto-js';
 
-function Search() {
+function Search({ authenticatedUserId }) { // Pass the authenticated user's ID as a prop
   const [queryText, setQueryText] = useState('');
   const [results, setResults] = useState([]);
 
@@ -37,7 +39,11 @@ function Search() {
         <h2>Search Results:</h2>
         <ul>
           {results.map((user) => (
-            <li key={user.id}>{user.displayName}</li>
+            <li key={user.uid}>
+              <Link to={`/privateChat/${generateChatRoomId(authenticatedUserId, user.uid)}`}>
+                {user.displayName}
+              </Link>
+            </li>
           ))}
         </ul>
       </div>
@@ -46,3 +52,10 @@ function Search() {
 }
 
 export default Search;
+
+// Helper function to generate a unique chat room ID based on user IDs
+function generateChatRoomId(userId1, userId2) {
+    const sortedUserIds = [userId1, userId2].sort();
+    const chatRoomId = SHA256(sortedUserIds.join('-')).toString();
+    return chatRoomId;
+}
