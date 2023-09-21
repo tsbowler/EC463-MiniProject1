@@ -1,8 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { collection, doc, onSnapshot, addDoc, serverTimestamp, query as firestoreQuery, where } from 'firebase/firestore'; // Import query as firestoreQuery
+import { collection, doc, onSnapshot, addDoc, serverTimestamp, query as firestoreQuery, where, setDoc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+
+async function createChatRoomIfNotExists(chatRoomId, user) {
+  // Create a reference to the chat room document
+  const chatRoomRef = doc(db, 'chatRooms', chatRoomId);
+
+  // Check if the chat room document exists
+  const chatRoomDoc = await getDoc(chatRoomRef);
+
+  if (!chatRoomDoc.exists()) {
+    // Extract the user IDs from the chatRoomId
+    const userIds = chatRoomId.split('-');
+
+    // If the chat room document doesn't exist, create it
+    await setDoc(chatRoomRef, {
+      chatRoomId: chatRoomId,
+      user1: userIds[0],
+      user2: userIds[1], // Set the user2 ID based on the chatRoomId
+    });
+  }
+}
 
 function PrivateChat() {
   const { chatRoomId } = useParams();
@@ -12,22 +32,27 @@ function PrivateChat() {
   const [user] = useAuthState(auth);
 
   useEffect(() => {
+    // Create the chat room if it doesn't exist
+    createChatRoomIfNotExists(chatRoomId, user);
+  
+    // Create a reference to the messages collection within the chat room document
     const chatRoomRef = doc(db, 'chatRooms', chatRoomId);
     const messagesRef = collection(chatRoomRef, 'messages');
-    const q = firestoreQuery(messagesRef, where('chatRoomId', '==', chatRoomId)); // Add this line to create the Firestore query
-
-    const unsubscribe = onSnapshot(q, (querySnapshot) => { // Use the 'q' query
+    const q = firestoreQuery(messagesRef, where('chatRoomId', '==', chatRoomId));
+  
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const messageList = [];
       querySnapshot.forEach((doc) => {
         messageList.push(doc.data());
       });
       setMessages(messageList);
     });
-
+  
     return () => {
       unsubscribe();
     };
-  }, [chatRoomId]);
+  }, [chatRoomId, user]);
+  
 
   const sendMessage = async () => {
     if (message.trim() === '') return;
@@ -40,7 +65,7 @@ function PrivateChat() {
         text: message,
         createdAt: serverTimestamp(),
         user: user.displayName || 'Guest',
-        chatRoomId: chatRoomId, // Add chatRoomId to associate messages with the correct room
+        chatRoomId: chatRoomId,
       });
 
       setMessage('');
@@ -49,13 +74,15 @@ function PrivateChat() {
     }
   };
 
+  const sortedMessages = [...messages].sort((a, b) => a.createdAt - b.createdAt);
+
   return (
     <div>
-      {chatRoom ? (
+      {true ? (
         <div>
           <h2>Private Chat Room</h2>
           <div className="chat-messages">
-            {messages.map((msg, index) => (
+            {sortedMessages.map((msg, index) => (
               <div key={index}>
                 <strong>{msg.user}:</strong> {msg.text}
               </div>

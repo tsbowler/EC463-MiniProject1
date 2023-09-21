@@ -23,3 +23,12 @@ export async function addUserToFirestore(user) {
         console.error('Error adding user to collection:', error);
       }
     }
+
+    function generateChatRoomId(userId1, userId2) {
+      const sortedUserIds = [userId1, userId2].sort();
+      const chatRoomId = sortedUserIds.join('-');
+      return chatRoomId;
+    }
+        
+
+export { generateChatRoomId };

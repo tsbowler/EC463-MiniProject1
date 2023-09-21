@@ -4,15 +4,14 @@ import { auth } from '../firebase'; // Make sure you import your Firebase auth i
 import Search from './Search';
 
 const Home = () => {
-  const [user] = useAuthState(auth); // Get the authenticated user
-  console.log(user)
+  const [user] = useAuthState(auth);
   return (
     <div>
       <h2>Welcome to the Chat Room</h2>
       {user ? (
         <div>
-        <p>Welcome, {user.displayName}!</p>
-        <Search/>
+          <p>Welcome, {user.displayName}!</p>
+          <Search authenticatedUserId={user.uid} />
         </div>
       ) : (
         <p>You are not signed in. Please sign in to access the chat room.</p>

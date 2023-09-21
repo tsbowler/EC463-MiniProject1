@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { collection, where, query, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import { SHA256 } from 'crypto-js';
+import { generateChatRoomId } from '../firebaseUtils';
 
-function Search({ authenticatedUserId }) { // Pass the authenticated user's ID as a prop
+function Search({ authenticatedUserId }) { 
   const [queryText, setQueryText] = useState('');
   const [results, setResults] = useState([]);
 
@@ -52,10 +52,3 @@ function Search({ authenticatedUserId }) { // Pass the authenticated user's ID a
 }
 
 export default Search;
-
-// Helper function to generate a unique chat room ID based on user IDs
-function generateChatRoomId(userId1, userId2) {
-    const sortedUserIds = [userId1, userId2].sort();
-    const chatRoomId = SHA256(sortedUserIds.join('-')).toString();
-    return chatRoomId;
-}
