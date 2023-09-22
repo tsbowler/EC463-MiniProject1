@@ -1,7 +1,8 @@
 import React from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../firebase'; // Make sure you import your Firebase auth instance
+import { auth } from '../firebase'; 
 import Search from './Search';
+import GoogleSignoutButton from './GoogleSignoutButton';
 
 const Home = () => {
   const [user] = useAuthState(auth);
@@ -10,6 +11,7 @@ const Home = () => {
       <h2>Welcome to the Chat Room</h2>
       {user ? (
         <div>
+          <GoogleSignoutButton/>
           <p>Welcome, {user.displayName}!</p>
           <Search authenticatedUserId={user.uid} />
         </div>

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { collection, doc, onSnapshot, addDoc, serverTimestamp, query as firestoreQuery, where, setDoc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import GoogleSignoutButton from './GoogleSignoutButton';
 
 async function createChatRoomIfNotExists(chatRoomId, user) {
   // Create a reference to the chat room document
@@ -76,8 +77,14 @@ function PrivateChat() {
 
   const sortedMessages = [...messages].sort((a, b) => a.createdAt - b.createdAt);
 
+  const handleReturnHome = () => {
+    window.location.href = '/home';
+  };
+
   return (
     <div>
+      <GoogleSignoutButton/>
+      <button onClick={handleReturnHome}>Return to Home</button>
       {true ? (
         <div>
           <h2>Private Chat Room</h2>
