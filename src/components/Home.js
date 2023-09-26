@@ -3,6 +3,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase'; 
 import Search from './Search';
 import GoogleSignoutButton from './GoogleSignoutButton';
+//import "../style.scss"
 
 const Home = () => {
   const [user] = useAuthState(auth);

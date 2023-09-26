@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../firebase';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+//import '../style.scss';
+
+
+
 
 function GoogleLoginButton() {
   const [user] = useAuthState(auth);
@@ -34,11 +38,24 @@ function GoogleLoginButton() {
   }, [redirectTo]);
 
   return (
-    <div>
-      <button onClick={handleGoogleSignIn}>
-        Sign in with Google
-      </button>
+    // <div>
+    //   <button onClick={handleGoogleSignIn}>
+    //     Sign in with Google
+    //   </button>
+    // </div>
+    
+    
+    <div className="formContainer">
+    <div className="formWrapper">
+        <span className="logo">FindMyFriends</span>
+          <div></div>
+            <button onClick={handleGoogleSignIn}>Sign in with Google </button>
+        
     </div>
+</div>
+
+
+
   );
 }
 

@@ -5,6 +5,8 @@ import PrivateChat from './components/PrivateChat';
 import { useEffect, useState } from 'react';
 import { auth } from './firebase';
 import { addUserToFirestore } from './firebaseUtils'; // Import your utility function
+//import "./style.scss"
+
 
 function App() {
   const [loading, setLoading] = useState(true);
